@@ -1,0 +1,5 @@
+# Build artifacts
+/bin
+
+# Configuration file, can contain personal information
+secret-santa.yml

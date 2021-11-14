@@ -14,3 +14,37 @@ constraints are:
 1. The chain of Santas makes a single large loop.
 2. Nobody gets assigned someone in their immediate family.
    - Our extended family is composed of 4 "sub-families".
+
+## Usage
+
+To build the tool, you need to have [Go](https://golang.org/doc/install)
+installed. Then, run this command:
+
+```bash
+make build
+```
+
+Run the tool by passing it a configuration file:
+
+```bash
+bin/secret-santa --config=secret-santa.yml
+```
+
+The configuration file should look something like this:
+
+```yaml
+families:
+  - name: Li
+    members:
+      - Ang
+      - Eugenia
+      - Jackie
+  - name: Stone
+    members:
+      - John
+      - Mia
+  - name: Virtue
+    members:
+      - Desiree
+      - Trevor
+```
