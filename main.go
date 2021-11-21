@@ -1,10 +1,13 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
+	"time"
 
 	"gopkg.in/yaml.v2"
 )
@@ -31,10 +34,22 @@ func run() error {
 	flag.Parse()
 
 	var ss secretSanta
-	ss.loadFromFile(*configFile)
+	if err := ss.loadFromFile(*configFile); err != nil {
+		return fmt.Errorf("loading config: %w", err)
+	}
 
-	// Prints raw data, useful during development.
-	fmt.Println(ss)
+	ss.shufflePeople(time.Now().UnixNano())
+
+	chain, err := ss.findChain()
+	if err != nil {
+		return fmt.Errorf("finding Santa chain: %w", err)
+	}
+
+	for i := range chain {
+		santa := chain[i]
+		giftee := chain[(i+1)%len(chain)]
+		fmt.Printf("%s -> %s\n", santa.name, giftee.name)
+	}
 
 	return nil
 }
@@ -50,6 +65,10 @@ type secretSanta struct {
 type person struct {
 	name   string
 	family string
+}
+
+func (p person) canBeSantaFor(other person) bool {
+	return p.family != other.family
 }
 
 // =============================================================================
@@ -81,4 +100,64 @@ func (ss *secretSanta) loadFromFile(fileName string) error {
 	}
 
 	return nil
+}
+
+// =============================================================================
+// Finding possible Santa chains
+// =============================================================================
+
+func (ss secretSanta) shufflePeople(seed int64) {
+	rand.Seed(seed)
+	rand.Shuffle(
+		len(ss.people),
+		func(i, j int) {
+			ss.people[i], ss.people[j] = ss.people[j], ss.people[i]
+		},
+	)
+}
+
+func (ss secretSanta) findChain() ([]person, error) {
+	chain := make([]person, len(ss.people))
+	alreadyPlaced := make([]bool, len(ss.people))
+
+	var pickPerson func(position int) bool
+	pickPerson = func(position int) bool {
+		for i, p := range ss.people {
+			if alreadyPlaced[i] {
+				continue
+			}
+
+			if position > 0 && !chain[position-1].canBeSantaFor(p) {
+				continue
+			}
+			if position == len(ss.people)-1 && !p.canBeSantaFor(chain[0]) {
+				// The last person in the chain must be Santa for the first
+				// person in the chain.
+				continue
+			}
+
+			chain[position] = p
+			alreadyPlaced[i] = true
+
+			if position == len(ss.people)-1 {
+				// We found a chain!
+				return true
+			}
+
+			if pickPerson(position + 1) {
+				return true
+			}
+
+			chain[position] = person{}
+			alreadyPlaced[i] = false
+		}
+
+		return false
+	}
+
+	if ok := pickPerson(0); !ok {
+		return nil, errors.New("no valid Santa chain exists")
+	}
+
+	return chain, nil
 }
