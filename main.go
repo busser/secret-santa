@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -31,11 +30,11 @@ func main() {
 func run() error {
 	flag.Parse()
 
-	var ss SecretSanta
+	var ss secretSanta
 	ss.loadFromFile(*configFile)
 
 	// Prints raw data, useful during development.
-	json.NewEncoder(os.Stdout).Encode(ss)
+	fmt.Println(ss)
 
 	return nil
 }
@@ -44,30 +43,41 @@ func run() error {
 // Data structures
 // =============================================================================
 
-type SecretSanta struct {
-	Families []Family
+type secretSanta struct {
+	people []person
 }
 
-type Family struct {
-	Name    string
-	Members []Person
+type person struct {
+	name   string
+	family string
 }
-
-type Person string
 
 // =============================================================================
 // Configuration parsing
 // =============================================================================
 
-func (ss *SecretSanta) loadFromFile(fileName string) error {
+func (ss *secretSanta) loadFromFile(fileName string) error {
 	f, err := os.Open(fileName)
 	if err != nil {
 		return fmt.Errorf("reading file: %w", err)
 	}
 	defer f.Close()
 
-	if err := yaml.NewDecoder(f).Decode(ss); err != nil {
+	var config struct {
+		Families []struct {
+			Name    string
+			Members []string
+		}
+	}
+
+	if err := yaml.NewDecoder(f).Decode(&config); err != nil {
 		return fmt.Errorf("decoding yaml: %w", err)
+	}
+
+	for _, f := range config.Families {
+		for _, p := range f.Members {
+			ss.people = append(ss.people, person{p, f.Name})
+		}
 	}
 
 	return nil
