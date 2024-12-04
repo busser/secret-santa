@@ -36,15 +36,22 @@ The configuration file should look something like this:
 families:
   - name: Li
     members:
-      - Ang
-      - Eugenia
-      - Jackie
+      - name: Ang
+        phone: +1234567890
+      - name: Eugenia
+        phone: +2345678901
+      - name: Jackie
+        phone: +3456789012
   - name: Stone
     members:
-      - John
-      - Mia
+      - name: John
+        phone: +4567890123
+      - name: Mia
+        phone: +5678901234
   - name: Virtue
     members:
-      - Desiree
-      - Trevor
+      - name: Desiree
+        phone: +6789012345
+      - name: Trevor
+        phone: +7890123456
 ```
