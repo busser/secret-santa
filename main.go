@@ -7,7 +7,6 @@ import (
 	"log"
 	"math/rand"
 	"os"
-	"time"
 
 	"gopkg.in/yaml.v2"
 )
@@ -38,7 +37,7 @@ func run() error {
 		return fmt.Errorf("loading config: %w", err)
 	}
 
-	ss.shufflePeople(time.Now().UnixNano())
+	ss.shufflePeople()
 
 	chain, err := ss.findChain()
 	if err != nil {
@@ -48,7 +47,7 @@ func run() error {
 	for i := range chain {
 		santa := chain[i]
 		giftee := chain[(i+1)%len(chain)]
-		fmt.Printf("%s -> %s\n", santa.name, giftee.name)
+		fmt.Printf("%s (%s) -> %s\n", santa.name, santa.phoneNumber, giftee.name)
 	}
 
 	return nil
@@ -63,8 +62,9 @@ type secretSanta struct {
 }
 
 type person struct {
-	name   string
-	family string
+	name        string
+	family      string
+	phoneNumber string
 }
 
 func (p person) canBeSantaFor(other person) bool {
@@ -85,7 +85,10 @@ func (ss *secretSanta) loadFromFile(fileName string) error {
 	var config struct {
 		Families []struct {
 			Name    string
-			Members []string
+			Members []struct {
+				Name  string
+				Phone string
+			}
 		}
 	}
 
@@ -95,7 +98,7 @@ func (ss *secretSanta) loadFromFile(fileName string) error {
 
 	for _, f := range config.Families {
 		for _, p := range f.Members {
-			ss.people = append(ss.people, person{p, f.Name})
+			ss.people = append(ss.people, person{p.Name, f.Name, p.Phone})
 		}
 	}
 
@@ -106,8 +109,7 @@ func (ss *secretSanta) loadFromFile(fileName string) error {
 // Finding possible Santa chains
 // =============================================================================
 
-func (ss secretSanta) shufflePeople(seed int64) {
-	rand.Seed(seed)
+func (ss secretSanta) shufflePeople() {
 	rand.Shuffle(
 		len(ss.people),
 		func(i, j int) {
