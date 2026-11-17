@@ -14,12 +14,12 @@ test: fmt vet
 ## build: Build a container image
 .PHONY: build
 build: fmt vet
-	go build -o bin/secret-santa main.go
+	go build -o bin/secret-santa .
 
 ## run: Run the CLI
 .PHONY: run
 run: fmt vet
-	go run main.go
+	go run .
 
 ## fmt: Format the source code
 .PHONY: fmt

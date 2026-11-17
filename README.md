@@ -24,11 +24,27 @@ installed. Then, run this command:
 make build
 ```
 
-Run the tool by passing it a configuration file:
+The tool works in two steps. First, draw the Santa chain:
 
 ```bash
-bin/secret-santa --config=secret-santa.yml
+bin/secret-santa draw
 ```
+
+This step picks a giftee and a message from `messages.yml` for each Santa. It
+saves the texts to `draw.json`. It does not show who gives a gift to whom, so
+the organizer can also take part. It refuses to replace an existing
+`draw.json`. To draw again, delete the file.
+
+Then, send each Santa their text by SMS through OVHcloud:
+
+```bash
+direnv exec . bin/secret-santa send
+```
+
+This step reads the OVH credentials from the environment (see `.envrc`). It
+records each text that it sends in `draw.json`. If a text fails, run the
+command again: it sends only the texts that were not sent. Phone numbers come
+from the configuration file, so you can correct a number after the draw.
 
 The configuration file should look something like this:
 

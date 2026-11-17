@@ -3,3 +3,7 @@
 
 # Configuration file, can contain personal information
 secret-santa.yml
+
+# Draw state, holds every Santa's giftee
+draw.json
+draw.json.tmp

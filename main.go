@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"flag"
 	"fmt"
 	"log"
 	"math/rand"
@@ -12,45 +11,32 @@ import (
 )
 
 // =============================================================================
-// CLI flags
-// =============================================================================
-
-var (
-	configFile = flag.String("config", "secret-santa.yml", "Path to the file containing the list of family members")
-)
-
-// =============================================================================
 // Main logic
 // =============================================================================
 
+const usage = `Usage:
+  secret-santa draw [flags]   Draw the Santa chain and save each Santa's text.
+  secret-santa send [flags]   Send each saved text that was not sent yet.
+
+Run "secret-santa <command> -h" for the flags of a command.`
+
 func main() {
-	if err := run(); err != nil {
+	if len(os.Args) < 2 {
+		log.Fatal(usage)
+	}
+
+	var err error
+	switch os.Args[1] {
+	case "draw":
+		err = runDraw(os.Args[2:])
+	case "send":
+		err = runSend(os.Args[2:])
+	default:
+		log.Fatalf("Unknown command %q.\n\n%s", os.Args[1], usage)
+	}
+	if err != nil {
 		log.Fatalf("Error: %s\n", err.Error())
 	}
-}
-
-func run() error {
-	flag.Parse()
-
-	var ss secretSanta
-	if err := ss.loadFromFile(*configFile); err != nil {
-		return fmt.Errorf("loading config: %w", err)
-	}
-
-	ss.shufflePeople()
-
-	chain, err := ss.findChain()
-	if err != nil {
-		return fmt.Errorf("finding Santa chain: %w", err)
-	}
-
-	for i := range chain {
-		santa := chain[i]
-		giftee := chain[(i+1)%len(chain)]
-		fmt.Printf("%s (%s) -> %s\n", santa.name, santa.phoneNumber, giftee.name)
-	}
-
-	return nil
 }
 
 // =============================================================================
@@ -109,8 +95,8 @@ func (ss *secretSanta) loadFromFile(fileName string) error {
 // Finding possible Santa chains
 // =============================================================================
 
-func (ss secretSanta) shufflePeople() {
-	rand.Shuffle(
+func (ss secretSanta) shufflePeople(rng *rand.Rand) {
+	rng.Shuffle(
 		len(ss.people),
 		func(i, j int) {
 			ss.people[i], ss.people[j] = ss.people[j], ss.people[i]
