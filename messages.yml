@@ -1,0 +1,27 @@
+# One message per Santa, in Go text/template syntax.
+# {{.Santa}} is the person who receives the message.
+# {{.Giftee}} is the person that Santa gives a gift to.
+# The wording avoids gendered agreement, so any template fits any name.
+messages:
+  - "🎅 Ho ho ho, {{.Santa}} ! Le Père Noël a besoin de renfort cette année, et il compte sur toi. Ta mission : gâter {{.Giftee}} 🎁. Chut, c'est top secret ! 🤫"
+  - "✨ {{.Santa}}, les lutins ont tiré au sort… et cette année, tu es le Secret Santa de {{.Giftee}} ! 🎄 Pas un mot à personne 🤐"
+  - "🦌 Rodolphe a fait sa tournée de reconnaissance, {{.Santa}} : ton cadeau ira à {{.Giftee}} ! 🎁 Garde le secret bien au chaud sous ton bonnet 🧣"
+  - "🎄 Alerte de Noël ! 🚨 {{.Santa}}, ta cible de l'année est {{.Giftee}}. Prépare ton plus beau papier cadeau et ton air le plus innocent 😇"
+  - "❄️ Un flocon m'a soufflé un secret, {{.Santa}}… Cette année, c'est toi qui fais un cadeau à {{.Giftee}} ! 🎁 Motus et bouche cousue 🤫"
+  - "🍪 {{.Santa}}, pose ce biscuit une seconde : tu offres un cadeau à {{.Giftee}} cette année ! 🎅 Et surtout, pas de fuite 🕵️"
+  - "📜 Ordre de mission officiel du Pôle Nord 🐻‍❄️ Agent : {{.Santa}}. Destinataire du cadeau : {{.Giftee}}. Discrétion absolue exigée. Ce message s'autodétruira à Noël 💥"
+  - "🎶 Vive le vent, vive le vent… et vive {{.Giftee}}, qui reçoit ton cadeau cette année, {{.Santa}} ! 🎁 Chut, on ne chante pas ça trop fort 🤫"
+  - "🧝 Bonjour {{.Santa}}, ici le service des affectations de l'atelier du Père Noël. Ton affectation pour Noël : {{.Giftee}} 🎁. Merci de ne rien révéler aux autres lutins 🤫"
+  - "⛄ Le bonhomme de neige a tout vu, {{.Santa}} : c'est toi qui gâtes {{.Giftee}} cette année ! 🎁 Lui, il ne dira rien. Et toi ? 🤐"
+  - "🎁 Devine qui va recevoir un super cadeau de ta part, {{.Santa}} ? {{.Giftee}} ! 🎉 Mais {{.Giftee}} ne doit surtout pas le savoir 🤫"
+  - "🔔 Ding dong ! {{.Santa}}, les cloches de Noël sonnent pour {{.Giftee}} : c'est à toi de lui trouver un cadeau ! 🎄 Secret de famille oblige 🤐"
+  - "🌟 {{.Santa}}, l'étoile du sapin brille un peu plus fort pour toi : tu es le Secret Santa de {{.Giftee}} ! ✨ Garde ça pour toi 😉"
+  - "🛷 Attache ta ceinture, {{.Santa}} ! Ton traîneau décolle direction {{.Giftee}} 🎁. Atterrissage prévu sous le sapin, en toute discrétion 🤫"
+  - "🍫 {{.Santa}}, c'est la saison des chocolats et des secrets. Le tien : tu offres un cadeau à {{.Giftee}} ! 🎁 Ne le partage pas (le secret, hein, pour les chocolats on verra) 😄"
+  - "🕵️ Mission Noël, {{.Santa}} : trouver le cadeau parfait pour {{.Giftee}}, sans éveiller les soupçons. 🎄 Bonne chance, et pas un mot ! 🤐"
+  - "🎅 Le Père Noël a lu ta lettre, {{.Santa}}, et il a une réponse : cette année, c'est toi qui fais un cadeau à {{.Giftee}} ! 😄🎁 Chut !"
+  - "🧦 Les chaussettes sont accrochées, {{.Santa}}… Celle de {{.Giftee}} compte sur toi ! 🎁 Remplis-la en secret 🤫"
+  - "🎄 {{.Santa}}, roulement de tambour… 🥁 Cette année, tu gâtes… {{.Giftee}} ! 🎉 Et maintenant, on prend un air détaché 😎"
+  - "🌲 Psst, {{.Santa}} ! Le sapin m'a confié un secret : ton cadeau ira à {{.Giftee}}. 🎁 Les sapins sont très discrets, sois-le aussi 🤫"
+  - "☃️ Brrr, {{.Santa}}, il fait froid dehors… mais ton cadeau va réchauffer le cœur de {{.Giftee}} ! 🎁❤️ Le tirage est secret, garde-le bien 🤫"
+  - "🥂 Joyeux Noël en avance, {{.Santa}} ! 🎄 Le tirage au sort a parlé : tu es le Secret Santa de {{.Giftee}}. Que la magie de Noël t'inspire ✨🎁"
